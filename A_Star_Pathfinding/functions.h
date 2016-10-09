@@ -12,13 +12,31 @@ const int DMOVE = 14; // diagonal move cost
 
 
 					  // returns the heuristic value required for the alogrithm - estimated shortest distance to goal ************************************************
-int heuristic(location current, location goal) // using mannhatten method
+int heuristic(location current) // using mannhatten method
 {
-	int horizontal_cost = abs(current.xpos - goal.xpos)*VHMOVE;
-	int vertical_cost = abs(current.ypos - goal.ypos)*VHMOVE;
+	int horizontal_dist = abs(current.xpos - goal.xpos);
+	int vertical_dist = abs(current.ypos - goal.ypos);
+	int diagonal_dist = 0;
+
+	// the smaller of the 2 represents the max possible diagonals 
+	if (horizontal_dist > vertical_dist)
+	{
+		diagonal_dist = vertical_dist;
+	}
+	else if (horizontal_dist < vertical_dist)
+	{
+		diagonal_dist = horizontal_dist;
+	}
+	else if (horizontal_dist == vertical_dist)
+	{ 
+		diagonal_dist = horizontal_dist;
+	}
+
+	// the difference represents the remaing horizontal/vertical
+	int horvert_dist = abs(horizontal_dist - vertical_dist);
 
 	// return the combined cost
-	return horizontal_cost + vertical_cost;
+	return (horvert_dist*VHMOVE + diagonal_dist*DMOVE);
 }
 // **********************************************************************************
 
@@ -128,7 +146,7 @@ void updateCostValue(location& test, location current)
 {
 	test.value.parentx = current.xpos; // make the current the parent of this square being tested
 	test.value.parenty = current.ypos;  // make the current the parent of this square being tested
-	test.value.hCost = heuristic(test, goal);
+	test.value.hCost = heuristic(test);
 	test.value.gCost = gCostCalc(test, current);
 	test.value.fCost = test.value.hCost + test.value.gCost;
 }
@@ -146,12 +164,14 @@ void checksurrounding(location current)
 	{
 		for (int COLUMN = -1; COLUMN < 2; ++COLUMN)
 		{
-			// Calculate the position of the square of interest
-			test.ypos = current.ypos + ROW;
+			if ((ROW != 0 && COLUMN != 0))
+				//{
+					// Calculate the position of the square of interest
+				test.ypos = current.ypos + ROW;
 			test.xpos = current.xpos + COLUMN;
 
 			// check that square actually exists and is walkble and isn't on the closed list, and isn't the middle square
-			if (boundscheck(test.xpos, test.ypos) && map[test.xpos][test.ypos] != 'X' && !checkClosedList(test)) //&& (test.xpos != 0 && test.ypos != 0)) This seems to mess it up
+			if (boundscheck(test.xpos, test.ypos) && map[test.xpos][test.ypos] != 'X' && !checkClosedList(test)) // This seems to mess it up
 			{
 				// If it's not on the openList add it
 				if (checkOpenList(test) == false)
@@ -264,6 +284,8 @@ void pathfind(location start, location goal)
 		checksurrounding(currentSquare); // check and calculate the cost of all the surroundings
 		closedList.push_back(currentSquare); // add the current square to the closed list
 		deletefromopen(currentSquare); // remove the current square from the open list
+		// updateMap();
+			// drawmap();
 	}
 }
 // **********************************************************************************
