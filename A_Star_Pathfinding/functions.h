@@ -164,10 +164,10 @@ void checksurrounding(location current)
 	{
 		for (int COLUMN = -1; COLUMN < 2; ++COLUMN)
 		{
-			if ((ROW != 0 && COLUMN != 0))
-				//{
-					// Calculate the position of the square of interest
-				test.ypos = current.ypos + ROW;
+			// if ((ROW != 0 && COLUMN != 0))
+			// {
+				// Calculate the position of the square of interest
+			test.ypos = current.ypos + ROW;
 			test.xpos = current.xpos + COLUMN;
 
 			// check that square actually exists and is walkble and isn't on the closed list, and isn't the middle square
@@ -192,6 +192,7 @@ void checksurrounding(location current)
 		}
 	}
 }
+//}
 // **********************************************************************************
 
 
@@ -277,15 +278,13 @@ void pathfind(location start, location goal)
 
 	// Variables
 	location currentSquare = start;
-
+	// 
 	while (!checkClosedList(goal) && openList.size() > 0) // Main Algorithm loop
 	{
 		currentSquare = findLowestFcost(); // find the lowest f cost on the list
 		checksurrounding(currentSquare); // check and calculate the cost of all the surroundings
 		closedList.push_back(currentSquare); // add the current square to the closed list
 		deletefromopen(currentSquare); // remove the current square from the open list
-		// updateMap();
-			// drawmap();
 	}
 }
 // **********************************************************************************
