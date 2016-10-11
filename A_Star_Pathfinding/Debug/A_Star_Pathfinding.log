@@ -1,3 +1,13 @@
 ﻿  main.cpp
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(244): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(245): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(252): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(253): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(260): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(261): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(268): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(269): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(276): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\game dev\learning projects\other projects\a_star_pathfinding\a-star-pathfinding\a_star_pathfinding\functions.h(277): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   A_Star_Pathfinding.vcxproj -> D:\Game Dev\Learning Projects\Other Projects\A_Star_Pathfinding\A-star-pathfinding\Debug\A_Star_Pathfinding.exe
   A_Star_Pathfinding.vcxproj -> D:\Game Dev\Learning Projects\Other Projects\A_Star_Pathfinding\A-star-pathfinding\Debug\A_Star_Pathfinding.pdb (Partial PDB)

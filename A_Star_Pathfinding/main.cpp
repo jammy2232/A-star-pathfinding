@@ -8,6 +8,8 @@
 #include<iostream>
 #include<vector>
 #include<cmath> // using the abs
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include "classes.h"
 
 // all this code is within the namespace std
@@ -18,16 +20,16 @@ using namespace std;
 const int ROWSIZE = 10;
 const int COLUMNSIZE = 10;
 
-char map[ROWSIZE][COLUMNSIZE] =	{ { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-								  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' } };
+char levelMap[ROWSIZE][COLUMNSIZE] =	{ { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+										  { 'X', ' ', 'X', 'X', 'X', ' ', ' ', ' ', ' ', ' ' },
+										  { ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+										  { 'X', ' ', 'X', ' ', ' ', 'X', 'X', 'X', 'X', 'X' },
+										  { ' ', 'X', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+										  { 'X', ' ', 'X', 'X', 'X', 'X', ' ', ' ', ' ', ' ' },
+										  { ' ', 'X', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+										  { 'X', ' ', 'X', ' ', 'X', ' ', 'X', 'X', 'X', 'X' },
+										  { ' ', 'X', 'X', ' ', 'X', ' ', ' ', ' ', ' ', ' ' },
+										  { ' ', ' ', ' ', 'X', 'X', ' ', ' ', ' ', ' ', ' ' } };
 
 // start and goal definition
 location start(0, 0);
@@ -42,20 +44,26 @@ vector<location> closedList;
 // Main Definintion ***********************************************************************************************************
 void main()
 {
-	drawmap(); // draw the blank map
-
-	cout << endl << endl << "The pathfinding A* is running." << endl << endl;
+	sf::RenderWindow window(sf::VideoMode(1000, 1000), "A* Algorithm Test"); // Create a window 
+	sf::RenderWindow* pwindow = &window;
 
 	pathfind(start, goal); // find the path
+	updateMap();
 
-	updateMap(); // update with the path shown
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
 
-	drawmap(); // draw the blank map
+		drawmap(pwindow); // draw the blank map
 
-	char q;
-	cin >> q;
+		window.display();
+	}
 }
-
 
 
 

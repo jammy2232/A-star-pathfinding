@@ -62,9 +62,9 @@ location findLowestFcost()
 
 
 // check that the locatioin is in the array ***************************************************
-bool boundscheck(int row, int column)
+bool invalidboundscheck(int row, int column)
 {
-	if (row > -1 && column > -1 && row < (ROWSIZE) && column < (COLUMNSIZE))
+	if (row < -1 || column < -1 || row > (ROWSIZE) || column > (COLUMNSIZE))
 	{
 		return true;
 	}
@@ -164,27 +164,28 @@ void checksurrounding(location current)
 	{
 		for (int COLUMN = -1; COLUMN < 2; ++COLUMN)
 		{
-			// if ((ROW != 0 && COLUMN != 0))
-			// {
-				// Calculate the position of the square of interest
-			test.ypos = current.ypos + ROW;
-			test.xpos = current.xpos + COLUMN;
-
-			// check that square actually exists and is walkble and isn't on the closed list, and isn't the middle square
-			if (boundscheck(test.xpos, test.ypos) && map[test.xpos][test.ypos] != 'X' && !checkClosedList(test)) // This seems to mess it up
+			if ((ROW != 0 && COLUMN != 0))
 			{
-				// If it's not on the openList add it
-				if (checkOpenList(test) == false)
+				// Calculate the position of the square of interest
+				test.ypos = current.ypos + ROW;
+				test.xpos = current.xpos + COLUMN;
+
+				// check that square actually exists and is walkble and isn't on the closed list, and isn't the middle square
+				if (!invalidboundscheck(test.xpos, test.ypos) && levelMap[test.xpos][test.ypos] != 'X' && !checkClosedList(test)) // This seems to mess it up
 				{
-					updateCostValue(test, current); // calculate all the costs
-					openList.push_back(test); // add it to the list
-				}
-				else // it's already on the list
-				{
-					if (test.value.gCost > gCostCalc(test, current)) // check if it's a better route
+					// If it's not on the openList add it
+					if (checkOpenList(test) == false)
 					{
-						updateCostValue(test, current); // if not recalcuate the better route
-						save(test); // save it to the open list
+						updateCostValue(test, current); // calculate all the costs
+						openList.push_back(test); // add it to the list
+					}
+					else // it's already on the list
+					{
+						if (test.value.gCost > gCostCalc(test, current)) // check if it's a better route
+						{
+							updateCostValue(test, current); // if not recalcuate the better route
+							save(test); // save it to the open list
+						}
 					}
 				}
 
@@ -192,7 +193,7 @@ void checksurrounding(location current)
 		}
 	}
 }
-//}
+
 // **********************************************************************************
 
 
@@ -214,30 +215,74 @@ void deletefromopen(location target) // remove the current square from the open 
 
 
 // Function to draw the map to the screen ************************************************
-void drawmap()
+void drawmap(sf::RenderWindow* window)
 {
 
-	map[start.xpos][start.ypos] = 'S'; // mark the start and finish
-	map[goal.xpos][goal.ypos] = 'G';
+	char testSpace;
+	int m_width = 100;
+	int m_length = 100;
+	int m_x_origin = 0;
+	int m_y_origin = 0;
 
-	cout << "________________________" << endl << endl; // cosmetic
+	levelMap[start.xpos][start.ypos] = 'S'; // mark the start and finish
+	levelMap[goal.xpos][goal.ypos] = 'G';
+	
 
 	for (unsigned int i = 0; i < 10; i++)
 	{
-
-		cout << "| "; // cosmetic
-
+		
 		for (unsigned int j = 0; j < 10; j++)
 		{
-			cout << map[i][j] << " "; // Draw the map with a space between each array entry
+			testSpace =  levelMap[i][j]; // Draw the map with a space between each array entry
+			m_x_origin = 100 * j;
+			m_y_origin = 100 * i;
+
+			switch (testSpace)
+			{
+			case ' ':
+			{
+				sf::RectangleShape box(sf::Vector2f(m_width, m_length));
+				box.setPosition(m_x_origin, m_y_origin);
+				box.setFillColor(sf::Color::White);
+				(*window).draw(box);
+				break;
+			}
+			case 'X':
+			{
+				sf::RectangleShape box(sf::Vector2f(m_width, m_length));
+				box.setPosition(m_x_origin, m_y_origin);
+				box.setFillColor(sf::Color::Black);
+				(*window).draw(box);
+				break;
+			}
+			case 'O':
+			{
+				sf::RectangleShape box(sf::Vector2f(m_width, m_length));
+				box.setPosition(m_x_origin, m_y_origin);
+				box.setFillColor(sf::Color::Red);
+				(*window).draw(box);
+				break;
+			}
+			case 'G':
+			{
+				sf::RectangleShape box(sf::Vector2f(m_width, m_length));
+				box.setPosition(m_x_origin, m_y_origin);
+				box.setFillColor(sf::Color::Green);
+				(*window).draw(box);
+				break;
+			}
+			case 'S':
+			{
+				sf::RectangleShape box(sf::Vector2f(m_width, m_length));
+				box.setPosition(m_x_origin, m_y_origin);
+				box.setFillColor(sf::Color::Magenta);
+				(*window).draw(box);
+				break;
+			}
+			} // end of switch
+		
 		}
-
-		cout << " |" << endl; // Add a new line after each row 
-
 	}
-
-	cout << "________________________"; // cosmetic
-
 }
 // **********************************************************************************
 
@@ -251,7 +296,7 @@ void updateMap()
 
 	while (pathNode != start)
 	{
-		map[pathNode.xpos][pathNode.ypos] = 'O'; // mark the path
+		levelMap[pathNode.xpos][pathNode.ypos] = 'O'; // mark the path
 		for (unsigned int i = closedList.size() - 1; i < -1; i--) // check the list
 		{
 			if (closedList[i].xpos == pathNode.value.parentx && closedList[i].ypos == pathNode.value.parenty) // find the parent
@@ -262,8 +307,8 @@ void updateMap()
 		}
 	}
 
-	map[start.xpos][start.ypos] = 'S'; // mark the start and finish
-	map[goal.xpos][goal.ypos] = 'G';
+	levelMap[start.xpos][start.ypos] = 'S'; // mark the start and finish
+	levelMap[goal.xpos][goal.ypos] = 'G';
 
 }
 
